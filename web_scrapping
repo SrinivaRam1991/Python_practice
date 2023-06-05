@@ -1,0 +1,25 @@
+import requests
+import pandas
+from bs4 import BeautifulSoup
+import csv
+
+url = 'https://www.zigwheels.com/newcars?utm_campaign=ZW-GSN-Search-Brand&utm_device=c&utm_term=%2Bzigwheels&network=g&utm_medium=cpc&utm_source=google&agid=33012567986&ap=&aoi=&ci=660584089&cre=375755294812&fid=&lop=1007743&ma=b&mo=&network=g&pl=&ti=kwd-36542748785&gclid=Cj0KCQjwr82iBhCuARIsAO0EAZzzz051FY6n4yIlLt0eC2_0T17OeC8Q-GUFc9hw9bPCV7nhX-cRCXwaAj1SEALw_wcB'
+response = requests.get(url)
+# print(response) 
+soup = BeautifulSoup(response.content, "html.parser")
+# print(soup)
+data = []
+    # Extract the information for each car
+list_items = soup.find_all('li')
+for item in list_items:
+        text = item.text.strip('')
+        data.append([text])
+print(data)
+
+# Save the data to a CSV file
+filename = 'webscrapping_example.csv'
+with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+    writer = csv.writer(csvfile)
+    
+    for row in data:
+        writer.writerow(row)
